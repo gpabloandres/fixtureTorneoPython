@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixture del Torneo de Programación Python</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados y correcciones */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0a09; /* stone-950 */
+            color: #F9FAFB; /* text-gray-50 */
+            background-image: radial-gradient(#292524 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+
+        .tournament-bracket {
+            display: flex;
+            align-items: stretch; /* Clave para alinear rondas */
+            padding: 2rem;
+            min-height: 100vh;
+            gap: 1.5rem; /* Espacio reducido entre rondas */
+            overflow-x: auto;
+        }
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around; /* Clave para espaciar partidas */
+            gap: 2rem; 
+            min-width: 280px;
+            flex-grow: 1;
+        }
+        
+        .match {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            background-color: #1F2937; /* bg-gray-800 */
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border: 1px solid #374151;
+        }
+
+        .team {
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid transparent;
+            position: relative;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .team:first-child {
+            border-bottom: 1px solid #374151; /* border-gray-700 */
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+        
+        .team:last-child {
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+
+        .team:not(.winner):hover {
+            background-color: #374151; /* bg-gray-700 */
+        }
+        
+        /* Estilo para el ganador */
+        .winner {
+            background-color: #166534; /* bg-green-800 */
+            font-weight: bold;
+            border-color: #22c55e; /* border-green-500 */
+        }
+        
+        .winner .team-name::after {
+            content: '🏆';
+            margin-left: 0.5rem;
+            filter: drop-shadow(0 0 3px #fde047);
+        }
+
+        /* --- Lógica de Conectores (Eliminada) --- */
+        .match::after,
+        .round .match::before,
+        .round .team::before {
+            display: none;
+        }
+
+        [contenteditable="true"] {
+            outline: none;
+            border-bottom: 2px dashed #4B5563;
+            padding: 2px;
+            transition: border-color 0.2s;
+        }
+        [contenteditable="true"]:focus {
+            border-color: #3B82F6;
+        }
+
+        .champion-container {
+            text-align: center;
+            padding: 2rem;
+            background-color: #1F2937;
+            border-radius: 1rem;
+            border: 2px solid #FBBF24;
+            box-shadow: 0 0 20px #FBBF2480;
+        }
+        
+        .champion-title {
+             font-size: 2.25rem; /* text-4xl */
+             font-weight: 900;
+             color: #FBBF24; /* text-amber-400 */
+             text-shadow: 0 0 10px #FBBF24, 0 0 20px #FBBF24;
+        }
+    </style>
+</head>
+<body class="bg-stone-950 text-gray-50">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-12 flex flex-col md:flex-row items-center justify-center gap-4">
+             <!-- Logo del Colegio -->
+            <img src="./logoCTPAMM.png" alt="Escudo del Colegio" class="h-24 md:h-28">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight">
+                    Torneo Interno de Programación <span class="text-yellow-400">Python</span>
+                </h1>
+                <p class="text-gray-400 mt-2 text-lg">¡Que gane el mejor algoritmo!</p>
+            </div>
+        </header>
+
+        <main class="tournament-bracket">
+            <!-- Fase Inicial (Cuartos de Final) -->
+            <div class="round round-quarterfinals">
+                <h2 class="text-2xl font-bold text-center text-blue-400">Fase Inicial <br> <span class="text-sm text-gray-400 font-normal">Lunes 30 de Junio</span></h2>
+                <div class="match match-1" data-match-id="qf-1">
+                    <div class="team" data-team-id="qf-1-1" onclick="selectWinner(this)">
+                        <span class="team-name" contenteditable="true">5º1º (Alejandro - Camilo)</span>
+                    </div>
+                    <div class="team" data-team-id="qf-1-2" onclick="selectWinner(this)">
+                        <span class="team-name" contenteditable="true">5º2º (Celina - Leandro)</span>
+                    </div>
+                </div>
+                <div class="match match-2" data-match-id="qf-2">
+                    <div class="team" data-team-id="qf-2-1" onclick="selectWinner(this)">
+                        <span class="team-name" contenteditable="true">5º3º (Juan Guridi - Nahuel)</span>
+                    </div>
+                    <div class="team" data-team-id="qf-2-2" onclick="selectWinner(this)">
+                        <span class="team-name" contenteditable="true">6º1º (Orión - Tomás)</span>
+                    </div>
+                </div>
+                <div class="match match-3" data-match-id="qf-3">
+                    <div class="team" data-team-id="qf-3-1" onclick="selectWinner(this)">
+                        <span class="team-name" contenteditable="true">6º1º (Morena - Lucia)</span>
+                    </div>
+                    <div class.team" data-team-id="qf-3-2" onclick="selectWinner(this)">
+                        <span class="team-name" contenteditable="true">6º2º (Máximo - Valentino)</span>
+                    </div>
+                </div>
+                <div class="match match-4" data-match-id="qf-4">
+                    <div class="team" data-team-id="qf-4-1" onclick="selectWinner(this)">
+                        <span class="team-name" contenteditable="true">7º1º (Angel - Alexis)</span>
+                    </div>
+                    <div class="team" data-team-id="qf-4-2" onclick="selectWinner(this)">
+                        <span class="team-name" contenteditable="true">7º2º (Geremias - Tomás)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Semifinales -->
+            <div class="round round-semifinals">
+                <h2 class="text-2xl font-bold text-center text-green-400">Semifinales <br> <span class="text-sm text-gray-400 font-normal">Miércoles 2 de Julio</span></h2>
+                <div class="match match-1" data-match-id="sf-1">
+                    <div class="team" data-team-id="sf-1-1" data-source-match="qf-1" onclick="selectWinner(this)">
+                        <span class="team-name"></span>
+                    </div>
+                    <div class="team" data-team-id="sf-1-2" data-source-match="qf-2" onclick="selectWinner(this)">
+                        <span class="team-name"></span>
+                    </div>
+                </div>
+                <div class="match match-2" data-match-id="sf-2">
+                    <div class="team" data-team-id="sf-2-1" data-source-match="qf-3" onclick="selectWinner(this)">
+                        <span class="team-name"></span>
+                    </div>
+                    <div class="team" data-team-id="sf-2-2" data-source-match="qf-4" onclick="selectWinner(this)">
+                        <span class="team-name"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Final -->
+            <div class="round round-final">
+                <h2 class="text-2xl font-bold text-center text-red-400">Final <br> <span class="text-sm text-gray-400 font-normal">Viernes 4 de Julio</span></h2>
+                <div class="match" data-match-id="f-1">
+                    <div class="team" data-team-id="f-1-1" data-source-match="sf-1" onclick="selectWinner(this)">
+                        <span class="team-name"></span>
+                    </div>
+                    <div class="team" data-team-id="f-1-2" data-source-match="sf-2" onclick="selectWinner(this)">
+                        <span class="team-name"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campeón -->
+            <div class="round round-champion">
+                 <h2 class="text-2xl font-bold text-center text-yellow-400">Campeón</h2>
+                 <div class="champion-container">
+                     <div id="champion-display" class="text-2xl font-bold text-gray-400">
+                         A definir...
+                     </div>
+                 </div>
+            </div>
+
+        </main>
+        
+        <footer class="text-center mt-8">
+            <button id="reset-button" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                Reiniciar Fixture
+            </button>
+        </footer>
+
+    </div>
+
+    <script>
+        // Objeto para mapear los partidos y sus siguientes rondas
+        const nextMatchMap = {
+            'qf-1': 'sf-1-1',
+            'qf-2': 'sf-1-2',
+            'qf-3': 'sf-2-1',
+            'qf-4': 'sf-2-2',
+            'sf-1': 'f-1-1',
+            'sf-2': 'f-1-2',
+            'f-1': 'champion' // Identificador para el campeón
+        };
+
+        /**
+         * Selecciona un ganador para un partido.
+         * @param {HTMLElement} winningTeamEl - El elemento del equipo que ganó.
+         */
+        function selectWinner(winningTeamEl) {
+            // No hacer nada si el equipo no tiene nombre (está en una ronda futura)
+            const teamNameEl = winningTeamEl.querySelector('.team-name');
+            if (!teamNameEl.textContent.trim()) {
+                console.log("No action: team slot is empty.");
+                return;
+            }
+
+            const matchEl = winningTeamEl.closest('.match');
+            const matchId = matchEl.dataset.matchId;
+
+            // Remover la clase 'winner' de ambos equipos en el partido actual
+            const teamsInMatch = matchEl.querySelectorAll('.team');
+            teamsInMatch.forEach(team => team.classList.remove('winner'));
+            
+            // Añadir la clase 'winner' al equipo seleccionado
+            winningTeamEl.classList.add('winner');
+            
+            // Avanzar el ganador a la siguiente ronda
+            advanceWinner(winningTeamEl, matchId);
+        }
+
+        /**
+         * Avanza al equipo ganador a la siguiente ranura del fixture.
+         * @param {HTMLElement} winningTeamEl - El elemento del equipo ganador.
+         * @param {string} sourceMatchId - El ID del partido de origen.
+         */
+        function advanceWinner(winningTeamEl, sourceMatchId) {
+            const winnerName = winningTeamEl.querySelector('.team-name').textContent;
+            const nextSlotId = nextMatchMap[sourceMatchId];
+
+            // Limpiar las rondas futuras antes de colocar al nuevo ganador
+            clearFutureRounds(sourceMatchId);
+
+            if (nextSlotId) {
+                if (nextSlotId === 'champion') {
+                    // Mostrar al campeón
+                    const championDisplay = document.getElementById('champion-display');
+                    championDisplay.textContent = `${winnerName}`;
+                    championDisplay.classList.remove('text-gray-400');
+                    championDisplay.classList.add('champion-title');
+                } else {
+                    // Colocar en el siguiente partido
+                    const nextTeamSlot = document.querySelector(`[data-team-id='${nextSlotId}'] .team-name`);
+                    if (nextTeamSlot) {
+                        nextTeamSlot.textContent = winnerName;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Limpia los resultados de las rondas futuras cuando se cambia un ganador.
+         * @param {string} changedMatchId - El ID del partido que ha cambiado.
+         */
+        function clearFutureRounds(changedMatchId) {
+             let currentMatchId = changedMatchId;
+             let nextSlotId = nextMatchMap[currentMatchId];
+
+             while(nextSlotId) {
+                if (nextSlotId === 'champion') {
+                    const championDisplay = document.getElementById('champion-display');
+                    championDisplay.textContent = 'A definir...';
+                    championDisplay.classList.add('text-gray-400');
+                    championDisplay.classList.remove('champion-title');
+                    // Salimos del bucle una vez que reseteamos al campeón
+                    break; 
+                }
+                
+                const nextSlotEl = document.querySelector(`[data-team-id='${nextSlotId}']`);
+                if(nextSlotEl) {
+                     // Limpiar el nombre del equipo
+                    nextSlotEl.querySelector('.team-name').textContent = '';
+                    
+                    const nextMatchEl = nextSlotEl.closest('.match');
+                    
+                    // Quitar la clase de ganador de todos los equipos en la siguiente partida
+                    nextMatchEl.querySelectorAll('.team').forEach(team => {
+                        team.classList.remove('winner');
+                    });
+                    
+                    // Avanzar al siguiente eslabón de la cadena para limpiar
+                    currentMatchId = nextMatchEl.dataset.matchId;
+                    nextSlotId = nextMatchMap[currentMatchId];
+                } else {
+                    // Si no encontramos el siguiente eslabón, detenemos el bucle
+                    break; 
+                }
+             }
+        }
+        
+        // Funcionalidad del botón de reinicio
+        document.getElementById('reset-button').addEventListener('click', () => {
+            // Se reemplaza window.confirm con una lógica simple para evitar problemas en iframes
+            // En una app real, aquí se implementaría un modal de confirmación.
+            const userConfirmed = true; // Asumimos confirmación para este entorno.
+            
+            if (userConfirmed) {
+                // Resetear nombres de la primera ronda
+                document.querySelectorAll('.round-quarterfinals .team-name').forEach((el, index) => {
+                    el.textContent = `Equipo ${String.fromCharCode(65 + index)}`;
+                });
+
+                // Limpiar todas las rondas futuras
+                document.querySelectorAll('.round-semifinals .team-name, .round-final .team-name').forEach(el => {
+                    el.textContent = '';
+                });
+                
+                // Quitar todas las clases de ganador
+                document.querySelectorAll('.team').forEach(el => el.classList.remove('winner'));
+                
+                // Resetear el campeón
+                const championDisplay = document.getElementById('champion-display');
+                championDisplay.textContent = 'A definir...';
+                championDisplay.classList.add('text-gray-400');
+                championDisplay.classList.remove('champion-title');
+            }
+        });
+
+    </script>
+</body>
+</html>
